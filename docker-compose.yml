@@ -1,0 +1,22 @@
+services:
+  carrefour-mcp:
+    build: .
+    image: carrefour-mcp
+    container_name: carrefour-mcp
+    ports:
+      - "6080:6080"    # noVNC web interface
+    volumes:
+      - carrefour-data:/data
+    environment:
+      - BROWSER_HEADLESS=false
+      - CARREFOUR_DATA_DIR=/data
+    restart: unless-stopped
+    shm_size: 512m      # Chrome needs shared memory
+    # Allow Chrome sandbox (removes --no-sandbox flag, reduces bot detection)
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+
+volumes:
+  carrefour-data:
